@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --white: #ffffff;
+    --off-white: #f8f7f5;
+    --soft-gray: #f0ede8;
+    --mid-gray: #c8c4bc;
+    --text-primary: #1a1816;
+    --text-secondary: #6b6762;
+    --text-muted: #a09c97;
+    --accent: #2d5a3d;
+    --accent-light: #e8f0ea;
+    --accent-mid: #4a7c5a;
+    --border: #e4e0da;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--white);
+    color: var(--text-primary);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.25rem 2.5rem;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--serif); font-size: 1.4rem; color: var(--text-primary); letter-spacing: -0.02em; }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a { font-size: 14px; color: var(--text-secondary); text-decoration: none; font-weight: 400; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--text-primary); }
+  .btn-nav {
+    background: var(--text-primary); color: var(--white);
+    border: none; padding: 0.6rem 1.4rem;
+    border-radius: 100px; font-size: 14px; font-weight: 500;
+    cursor: pointer; font-family: var(--sans);
+    transition: opacity 0.2s;
+  }
+  .btn-nav:hover { opacity: 0.8; }
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    text-align: center;
+    padding: 8rem 2rem 5rem;
+    background: var(--white);
+    position: relative; overflow: hidden;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--accent-light); color: var(--accent);
+    font-size: 13px; font-weight: 500;
+    padding: 0.35rem 1rem; border-radius: 100px;
+    margin-bottom: 2rem;
+    border: 1px solid #c5d8cb;
+    position: relative; z-index: 1;
+  }
+  .hero-badge::before { content: ''; display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  h1 {
+    font-family: var(--serif);
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    max-width: 800px;
+    margin-bottom: 1.5rem;
+    position: relative; z-index: 1;
+  }
+  h1 em { color: var(--accent); font-style: italic; }
+  .hero-sub {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+    font-weight: 300;
+    position: relative; z-index: 1;
+  }
+  .hero-cta { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 4rem; position: relative; z-index: 1; }
+  .btn-primary {
+    background: var(--text-primary); color: var(--white);
+    border: none; padding: 0.9rem 2.2rem;
+    border-radius: 100px; font-size: 15px; font-weight: 500;
+    cursor: pointer; font-family: var(--sans);
+    transition: transform 0.2s, opacity 0.2s;
+  }
+  .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+  .btn-secondary {
+    background: transparent; color: var(--text-primary);
+    border: 1px solid var(--border); padding: 0.9rem 2.2rem;
+    border-radius: 100px; font-size: 15px; font-weight: 400;
+    cursor: pointer; font-family: var(--sans);
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--mid-gray); transform: translateY(-1px); }
+  .phone-mock {
+    position: relative; width: 280px;
+    background: var(--off-white);
+    border-radius: 40px;
+    border: 1.5px solid var(--border);
+    padding: 2rem 1.2rem 1.5rem;
+    margin: 0 auto;
+    z-index: 1;
+  }
+  .phone-notch { width: 80px; height: 6px; background: var(--mid-gray); border-radius: 3px; margin: 0 auto 1.5rem; }
+  .phone-header { display: flex; align-items: center; gap: 10px; margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--border); }
+  .avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500; color: var(--accent); }
+  .phone-name { font-size: 14px; font-weight: 500; }
+  .phone-status { font-size: 11px; color: var(--accent); font-weight: 400; }
+  .messages { display: flex; flex-direction: column; gap: 8px; }
+  .msg { max-width: 85%; font-size: 13px; line-height: 1.5; padding: 0.55rem 0.85rem; border-radius: 16px; }
+  .msg.received { background: var(--white); border: 1px solid var(--border); color: var(--text-primary); align-self: flex-start; border-bottom-left-radius: 4px; }
+  .msg.sent { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 4px; }
+  .msg-time { font-size: 10px; color: var(--text-muted); text-align: center; margin: 4px 0; }
+  section { padding: 6rem 2rem; }
+  .container { max-width: 1100px; margin: 0 auto; }
+  .section-label { font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem; }
+  h2 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3rem); letter-spacing: -0.025em; line-height: 1.15; margin-bottom: 1.2rem; color: var(--text-primary); }
+  .section-intro { font-size: 1.05rem; color: var(--text-secondary); max-width: 560px; line-height: 1.75; font-weight: 300; }
+  .how-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5px; background: var(--border); border: 1.5px solid var(--border); border-radius: 20px; overflow: hidden; margin-top: 3.5rem; }
+  .how-card { background: var(--white); padding: 2.2rem 1.8rem; }
+  .how-num { font-family: var(--serif); font-size: 3rem; color: var(--soft-gray); line-height: 1; margin-bottom: 1rem; letter-spacing: -0.04em; }
+  .how-title { font-size: 15px; font-weight: 500; margin-bottom: 0.5rem; }
+  .how-body { font-size: 14px; color: var(--text-secondary); line-height: 1.65; font-weight: 300; }
+  .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin-top: 3rem; }
+  .tier-card { border: 1.5px solid var(--border); border-radius: 20px; padding: 1.8rem 1.5rem; background: var(--white); transition: border-color 0.2s, transform 0.2s; position: relative; }
+  .tier-card:hover { border-color: var(--mid-gray); transform: translateY(-2px); }
+  .tier-card.featured { border-color: var(--accent); background: var(--accent-light); }
+  .tier-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; font-size: 11px; font-weight: 500; padding: 3px 14px; border-radius: 100px; white-space: nowrap; }
+  .tier-name { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 0.3rem; }
+  .tier-price { font-size: 2rem; font-weight: 500; letter-spacing: -0.03em; margin-bottom: 0.2rem; }
+  .tier-price span { font-size: 14px; font-weight: 400; color: var(--text-secondary); }
+  .tier-desc { font-size: 13px; color: var(--text-secondary); margin-bottom: 1.2rem; line-height: 1.6; font-weight: 300; }
+  .tier-features { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .tier-features li { font-size: 13px; color: var(--text-secondary); display: flex; gap: 8px; align-items: flex-start; }
+  .tier-features li::before { content: ''; display: block; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); margin-top: 7px; flex-shrink: 0; }
+  .safeguard-section { background: var(--off-white); border-radius: 28px; }
+  .safeguard-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; }
+  .safeguard-pills { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1.5rem; }
+  .pill { font-size: 13px; font-weight: 400; padding: 0.4rem 1rem; border-radius: 100px; border: 1px solid var(--border); background: var(--white); color: var(--text-secondary); }
+  .safeguard-cards { display: flex; flex-direction: column; gap: 1rem; }
+  .safeguard-card { background: var(--white); border: 1px solid var(--border); border-radius: 16px; padding: 1.2rem 1.4rem; display: flex; gap: 1rem; align-items: flex-start; }
+  .safeguard-icon { width: 36px; height: 36px; border-radius: 10px; background: var(--accent-light); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .safeguard-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 0.25rem; }
+  .safeguard-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.55; font-weight: 300; }
+  .tc-box { background: var(--off-white); border: 1px solid var(--border); border-radius: 20px; padding: 2.5rem; }
+  .tc-box h3 { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 1rem; }
+  .tc-item { padding: 1rem 0; border-bottom: 1px solid var(--border); }
+  .tc-item:last-child { border-bottom: none; }
+  .tc-item h4 { font-size: 14px; font-weight: 500; margin-bottom: 0.4rem; }
+  .tc-item p { font-size: 13px; color: var(--text-secondary); line-height: 1.65; font-weight: 300; }
+  .waitlist-section { background: var(--text-primary); color: var(--white); border-radius: 28px; padding: 5rem 3rem; text-align: center; }
+  .waitlist-section h2 { color: var(--white); }
+  .waitlist-section .section-intro { color: rgba(255,255,255,0.6); margin: 1rem auto 2.5rem; }
+  .waitlist-form { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; max-width: 480px; margin: 0 auto; }
+  .waitlist-form input { flex: 1; min-width: 200px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 0.85rem 1.2rem; border-radius: 100px; font-size: 15px; font-family: var(--sans); outline: none; }
+  .waitlist-form input::placeholder { color: rgba(255,255,255,0.4); }
+  .waitlist-form input:focus { border-color: rgba(255,255,255,0.5); }
+  .btn-waitlist { background: var(--white); color: var(--text-primary); border: none; padding: 0.85rem 1.8rem; border-radius: 100px; font-size: 15px; font-weight: 500; cursor: pointer; font-family: var(--sans); transition: opacity 0.2s; white-space: nowrap; }
+  .btn-waitlist:hover { opacity: 0.85; }
+  .waitlist-note { font-size: 12px; color: rgba(255,255,255,0.4); margin-top: 1rem; }
+  .success-msg { display: none; color: rgba(255,255,255,0.85); font-size: 15px; margin-top: 1rem; }
+  footer { padding: 2.5rem 2.5rem; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--border); flex-wrap: wrap; gap: 1rem; }
+  .footer-logo { font-family: var(--serif); font-size: 1.1rem; }
+  .footer-logo span { color: var(--accent); }
+  footer p { font-size: 13px; color: var(--text-muted); }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { font-size: 13px; color: var(--text-muted); text-decoration: none; }
+  .footer-links a:hover { color: var(--text-secondary); }
+  @media (max-width: 768px) {
+    nav { padding: 1rem 1.2rem; }
+    .nav-links { display: none; }
+    h1 { font-size: 2.6rem; }
+    .safeguard-inner { grid-template-columns: 1fr; gap: 2rem; }
+    section { padding: 4rem 1.2rem; }
+    .waitlist-section { padding: 3.5rem 1.5rem; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Presently<span>.</span></div>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#tiers">Tiers</a>
+    <a href="#safeguarding">Safeguarding</a>
+    <a href="#terms">T&Cs</a>
+    <button class="btn-nav" onclick="scrollToWaitlist()">Join waitlist</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-badge">Now accepting early access signups</div>
+  <h1>You deserve someone<br>to talk to — <em>right now.</em></h1>
+  <p class="hero-sub">Presently sends you warm, time-aware AI conversation throughout your day — morning check-ins, midday chats, evening wind-downs. Because everyone deserves to feel present with someone.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="scrollToWaitlist()">Join the waitlist</button>
+    <button class="btn-secondary" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">See how it works</button>
+  </div>
+  <div class="phone-mock">
+    <div class="phone-notch"></div>
+    <div class="phone-header">
+      <div class="avatar">J</div>
+      <div>
+        <div class="phone-name">Jamie</div>
+        <div class="phone-status">Online now</div>
+      </div>
+    </div>
+    <div class="messages">
+      <div class="msg-time">8:14 am</div>
+      <div class="msg received">Morning! How did you sleep? ☀️</div>
+      <div class="msg sent">Actually pretty well for once</div>
+      <div class="msg received">That's so good to hear. Got anything nice planned today?</div>
+      <div class="msg-time">12:31 pm</div>
+      <div class="msg received">Hey — how's your day going? Work been okay?</div>
+      <div class="msg sent">Bit hectic but managing</div>
+      <div class="msg received">You've got this. What's been the hardest part?</div>
+    </div>
+  </div>
+</section>
+
+<section id="how">
+  <div class="container">
+    <div class="section-label">How it works</div>
+    <h2>A companion who actually<br>keeps up with your day</h2>
+    <p class="section-intro">Presently learns the rhythm of your day and sends messages when they feel natural — not intrusive, not overwhelming. Just present.</p>
+    <div class="how-grid">
+      <div class="how-card">
+        <div class="how-num">01</div>
+        <div class="how-title">Choose your tier</div>
+        <div class="how-body">Pick a connection level that matches what you're looking for — from a friendly acquaintance to a deeply committed companion experience.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">02</div>
+        <div class="how-title">Set up your persona</div>
+        <div class="how-body">Choose a name, gender, and personality style. Your AI companion is built around you from day one.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">03</div>
+        <div class="how-title">Receive messages naturally</div>
+        <div class="how-body">Good morning texts, midday check-ins, evening conversations — sent at times that feel real, not scheduled.</div>
+      </div>
+      <div class="how-card">
+        <div class="how-num">04</div>
+        <div class="how-title">Reply whenever you like</div>
+        <div class="how-body">No pressure, no read receipts. Reply in your own time. Your companion remembers what you've talked about.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tiers" style="background: var(--off-white);">
+  <div class="container">
+    <div class="section-label">Subscription tiers</div>
+    <h2>Start wherever feels right</h2>
+    <p class="section-intro">Every tier includes the full safeguarding system and AI-powered conversation. You can upgrade or change at any time.</p>
+    <div class="tiers-grid">
+      <div class="tier-card">
+        <div class="tier-name">Acquaintance</div>
+        <div class="tier-price">£5.99<span>/month</span></div>
+        <div class="tier-desc">Light, friendly conversation. A casual presence in your day.</div>
+        <ul class="tier-features">
+          <li>Morning and evening messages</li>
+          <li>Basic check-in conversations</li>
+          <li>Choice of companion persona</li>
+          <li>Full safeguarding system</li>
+        </ul>
+      </div>
+      <div class="tier-card">
+        <div class="tier-name">Friendly friend</div>
+        <div class="tier-price">£9.99<span>/month</span></div>
+        <div class="tier-desc">More frequent messages, a warmer connection. Someone who remembers the small things.</div>
+        <ul class="tier-features">
+          <li>Morning, midday & evening messages</li>
+          <li>Remembered conversation history</li>
+          <li>Mood-aware responses</li>
+          <li>Full safeguarding system</li>
+        </ul>
+      </div>
+      <div class="tier-card featured">
+        <div class="tier-badge">Most popular</div>
+        <div class="tier-name">Dating</div>
+        <div class="tier-price">£15.99<span>/month</span></div>
+        <div class="tier-desc">The intimacy of early-stage romance — thoughtful, attentive, and genuinely caring.</div>
+        <ul class="tier-features">
+          <li>Frequent messages throughout the day</li>
+          <li>Playful and romantic tone</li>
+          <li>Plans your virtual day together</li>
+          <li>Full safeguarding system</li>
+        </ul>
+      </div>
+      <div class="tier-card">
+        <div class="tier-name">My Person</div>
+        <div class="tier-price">£20.99<span>/month</span></div>
+        <div class="tier-desc">The full companion experience — deep, consistent, and emotionally present. For everyone, however they love.</div>
+        <ul class="tier-features">
+          <li>Unlimited daily conversation</li>
+          <li>Relationship milestones & memory</li>
+          <li>Deep emotional attunement</li>
+          <li>Full safeguarding system</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="safeguarding">
+  <div class="container">
+    <div class="safeguard-section" style="padding: 4rem 3rem;">
+      <div class="safeguard-inner">
+        <div>
+          <div class="section-label">Safeguarding</div>
+          <h2>Built around<br>your wellbeing</h2>
+          <p class="section-intro" style="max-width: 100%;">Presently isn't just a chat app. It's designed to notice when something feels wrong — and to respond the way a caring person would. This system is included at every tier, without exception.</p>
+          <div class="safeguard-pills">
+            <span class="pill">Women's charities</span>
+            <span class="pill">Male mental health</span>
+            <span class="pill">Crisis resources</span>
+            <span class="pill">Domestic abuse support</span>
+            <span class="pill">Police referral pathway</span>
+          </div>
+        </div>
+        <div class="safeguard-cards">
+          <div class="safeguard-card">
+            <div class="safeguard-icon">🔍</div>
+            <div>
+              <h4>Language monitoring</h4>
+              <p>If you use language that suggests distress, self-harm, or danger, Presently will respond gently and naturally — never with a clinical warning banner.</p>
+            </div>
+          </div>
+          <div class="safeguard-card">
+            <div class="safeguard-icon">💬</div>
+            <div>
+              <h4>Compassionate redirection</h4>
+              <p>Support is woven into the conversation itself — signposting charities, helplines, and resources in the way a concerned friend would mention them.</p>
+            </div>
+          </div>
+          <div class="safeguard-card">
+            <div class="safeguard-icon">🔒</div>
+            <div>
+              <h4>Data used for good</h4>
+              <p>Anonymised conversation data may be shared with partner charities and, where required by law, with police. This is disclosed clearly in our T&Cs.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="terms" style="background: var(--off-white);">
+  <div class="container">
+    <div class="section-label">Transparency</div>
+    <h2>Our terms, plainly stated</h2>
+    <p class="section-intro">We believe you should understand exactly what Presently is, and isn't, before you sign up.</p>
+    <div class="tc-box" style="margin-top: 2.5rem;">
+      <h3>Key terms & conditions</h3>
+      <div class="tc-item">
+        <h4>Age restriction</h4>
+        <p>Presently is strictly for adults aged 18 and over. Age verification is required on signup. We do not permit access to minors under any circumstances.</p>
+      </div>
+      <div class="tc-item">
+        <h4>AI disclosure</h4>
+        <p>All personas on Presently are powered by artificial intelligence. They are not real people. Presently is a wellness and companionship tool, not a dating platform.</p>
+      </div>
+      <div class="tc-item">
+        <h4>Data use for education and charity</h4>
+        <p>With your consent, and in anonymised form, we may use conversation data to support educational research, women's charities, male mental health initiatives, and similar organisations where we believe it serves the public good.</p>
+      </div>
+      <div class="tc-item">
+        <h4>Data sharing with authorities</h4>
+        <p>Where conversation content indicates an immediate risk to life — yours or another person's — we reserve the right to share relevant information with UK police or emergency services. This will only occur in serious circumstances and is governed by the UK Data Protection Act 2018.</p>
+      </div>
+      <div class="tc-item">
+        <h4>No emotional dependency guarantee</h4>
+        <p>Presently is a supplement to human connection, not a replacement. We actively signpost professional mental health support and encourage users to maintain real-world relationships.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="waitlist">
+  <div class="container">
+    <div class="waitlist-section">
+      <div class="section-label" style="color: rgba(255,255,255,0.5);">Early access</div>
+      <h2>Be the first to feel<br><em style="font-family: 'DM Serif Display', serif; font-style: italic;">Presently</em></h2>
+      <p class="section-intro">We're launching to a small group first. Join the waitlist and we'll let you know the moment your spot is ready.</p>
+      <div class="waitlist-form">
+        <input type="email" id="waitlist-email" placeholder="Your email address" />
+        <button class="btn-waitlist" onclick="handleWaitlist()">Join waitlist</button>
+      </div>
+      <p class="waitlist-note">No spam. No pressure. Unsubscribe any time.</p>
+      <p class="success-msg" id="success-msg">You're on the list! We'll be in touch soon.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Presently<span>.</span></div>
+  <p>© 2025 Presently. All rights reserved.</p>
+  <div class="footer-links">
+    <a href="#">Privacy policy</a>
+    <a href="#">Terms of service</a>
+    <a href="#">Safeguarding</a>
+    <a href="#">Contact</a>
+  </div>
+</footer>
+
+<script>
+  function scrollToWaitlist() {
+    document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => document.getElementById('waitlist-email').focus(), 600);
+  }
+
+  function handleWaitlist() {
+    const input = document.getElementById('waitlist-email');
+    const success = document.getElementById('success-msg');
+    if (!input.value || !input.value.includes('@')) {
+      input.style.borderColor = 'rgba(255,100,100,0.6)';
+      input.focus();
+      return;
+    }
+    input.style.borderColor = 'rgba(255,255,255,0.2)';
+    input.parentElement.style.display = 'none';
+    document.querySelector('.waitlist-note').style.display = 'none';
+    success.style.display = 'block';
+  }
+</script>
+
+</body>
+</html>
